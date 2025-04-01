@@ -74,7 +74,7 @@ const HomePage = () => {
       {/* Header */}
       <header className="flex items-center justify-between py-5 border-b border-gray-200 bg-white">
         <div className="logo-container">
-          <h1 className="font-bold text-xl text-gray-800">TravelGram X</h1>
+          <h1 className="font-bold text-xl text-gray-800">TravelGram</h1>
         </div>
         
         <nav className="hidden md:block">
@@ -112,7 +112,7 @@ const HomePage = () => {
       <section className="bg-gray-200 rounded-lg h-64 my-8 flex items-center justify-center text-center">
         <div>
           <h2 className="text-2xl font-semibold text-gray-700 mb-5">Curate your perfect photo journey</h2>
-          <button className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-3 px-6 rounded-full transition-colors">
+          <button className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-full transition-colors">
             Start Planning Your Trip
           </button>
         </div>
