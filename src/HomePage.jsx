@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 
 const HomePage = () => {
+  const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState('');
   const [destination, setDestination] = useState('');
   const [startDate, setStartDate] = useState('');
@@ -66,7 +68,8 @@ const HomePage = () => {
 
   const handleCreateItinerary = () => {
     console.log('Creating itinerary with:', { destination, startDate, endDate, style });
-    // Add your logic here
+    // Navigate to itineraries page after creating
+    navigate('/itineraries');
   };
 
   return (
@@ -74,15 +77,25 @@ const HomePage = () => {
       {/* Header */}
       <header className="flex items-center justify-between py-5 border-b border-gray-200 bg-white">
         <div className="logo-container">
-          <h1 className="font-bold text-xl text-gray-800">TravelGram</h1>
+          <Link to="/">
+            <h1 className="font-bold text-xl text-gray-800">TravelGram</h1>
+          </Link>
         </div>
         
         <nav className="hidden md:block">
           <ul className="flex">
-            <li className="mx-4"><a href="#discover" className="text-gray-600 font-medium hover:text-blue-500 transition-colors">Discover</a></li>
-            <li className="mx-4"><a href="#explore" className="text-gray-600 font-medium hover:text-blue-500 transition-colors">Explore</a></li>
-            <li className="mx-4"><a href="#plan" className="text-gray-600 font-medium hover:text-blue-500 transition-colors">Plan</a></li>
-            <li className="mx-4"><a href="#creators" className="text-gray-600 font-medium hover:text-blue-500 transition-colors">Creators</a></li>
+            <li className="mx-4">
+              <Link to="/" className="text-gray-600 font-medium hover:text-blue-500 transition-colors">Discover</Link>
+            </li>
+            <li className="mx-4">
+              <Link to="/explore" className="text-gray-600 font-medium hover:text-blue-500 transition-colors">Explore</Link>
+            </li>
+            <li className="mx-4">
+              <Link to="/itineraries" className="text-gray-600 font-medium hover:text-blue-500 transition-colors">Plan</Link>
+            </li>
+            <li className="mx-4">
+              <Link to="/preferences" className="text-gray-600 font-medium hover:text-blue-500 transition-colors">Profile</Link>
+            </li>
           </ul>
         </nav>
         
@@ -102,9 +115,11 @@ const HomePage = () => {
             </button>
           </div>
           
-          <button className="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center font-semibold">
-            U
-          </button>
+          <Link to="/preferences">
+            <button className="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center font-semibold">
+              U
+            </button>
+          </Link>
         </div>
       </header>
 
@@ -112,9 +127,11 @@ const HomePage = () => {
       <section className="bg-gray-200 rounded-lg h-64 my-8 flex items-center justify-center text-center">
         <div>
           <h2 className="text-2xl font-semibold text-gray-700 mb-5">Curate your perfect photo journey</h2>
-          <button className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-full transition-colors">
-            Start Planning Your Trip
-          </button>
+          <Link to="/itineraries">
+            <button className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-full transition-colors">
+              Start Planning Your Trip
+            </button>
+          </Link>
         </div>
       </section>
 
