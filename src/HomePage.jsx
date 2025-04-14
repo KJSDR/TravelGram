@@ -14,7 +14,7 @@ const HomePage = () => {
       description: 'Famous for: Sunsets, Architecture',
       rating: 4.9,
       tag: 'Popular now',
-      image: '/public/santorini.jpg'
+      image: '/santorini.jpg'
     },
     {
       id: 2,
@@ -22,7 +22,7 @@ const HomePage = () => {
       description: 'Famous for: Temples, Fall Colors',
       rating: 4.8,
       tag: 'Seasonal',
-      image: '/public/kyoto.avif'
+      image: '/kyoto.avif'
     },
     {
       id: 3,
@@ -30,7 +30,7 @@ const HomePage = () => {
       description: 'Famous for: Mountains, Lakes',
       rating: 4.9,
       tag: 'Winter peak',
-      image: '/public/banff.jpg'
+      image: '/banff.jpg'
     }
   ];
 
@@ -39,19 +39,19 @@ const HomePage = () => {
       id: 1,
       name: 'Lake Moraine Viewpoint',
       photoCount: '3,240 photos this month',
-      image: '/public/lakemoraine.jpg'
+      image: '/lakemoraine.jpg'
     },
     {
       id: 2,
       name: 'Bali Rice Terraces',
       photoCount: '',
-      image: '/public/balirice.jpg'
+      image: '/balirice.jpg'
     },
     {
       id: 3,
       name: 'NYC Skyline View',
       photoCount: '',
-      image: '/public/nycskyline.jpg'
+      image: '/nycskyline.jpg'
     }
   ];
 
@@ -61,7 +61,7 @@ const HomePage = () => {
     rating: 4.9,
     reviews: 52,
     specialties: 'Street, Architecture, Portraits',
-    avatar: '/public/elena.jpg'
+    avatar: '/elena.jpg'
   };
 
   const handleCreateItinerary = () => {
