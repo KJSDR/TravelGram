@@ -91,7 +91,7 @@ const HomePage = () => {
               <Link to="/explore" className="text-gray-600 font-medium hover:text-blue-500 transition-colors">Explore</Link>
             </li>
             <li className="mx-4">
-              <Link to="/itineraries" className="text-gray-600 font-medium hover:text-blue-500 transition-colors">Plan</Link>
+              <Link to="/itineraries" className="text-gray-600 font-medium hover:text-blue-500 transition-colors">Your Adventures</Link>
             </li>
             <li className="mx-4">
               <Link to="/preferences" className="text-gray-600 font-medium hover:text-blue-500 transition-colors">Profile</Link>

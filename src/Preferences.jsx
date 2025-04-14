@@ -54,7 +54,7 @@ const Preferences = () => {
             <ul className="flex">
               <li className="mx-4"><Link to="/" className="text-gray-300 hover:text-white transition-colors">Discover</Link></li>
               <li className="mx-4"><Link to="/explore" className="text-gray-300 hover:text-white transition-colors">Explore</Link></li>
-              <li className="mx-4"><Link to="/itineraries" className="text-gray-300 hover:text-white transition-colors">Plan</Link></li>
+              <li className="mx-4"><Link to="/itineraries" className="text-gray-300 hover:text-white transition-colors">Your Adventures</Link></li>
               <li className="mx-4"><Link to="/preferences" className="text-gray-300 hover:text-white transition-colors">Profile</Link></li>
             </ul>
           </nav>
