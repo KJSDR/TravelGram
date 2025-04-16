@@ -1,25 +1,17 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 
-const Preferences = () => {
-  // Sample preferences data
-  const categories = [
-    'Nature/Landscapes',
-    'Food/Drink',
-    'Architecture',
-    'Beaches/Waterfronts',
-    'Ecotour Areas'
-  ];
+const Explore = () => {
+  const [searchQuery, setSearchQuery] = useState('');
   
-  const accessibility = [
-    'Wheelchair Accessible',
-    'Elevation: Low'
-  ];
-  
-  const languages = [
-    'English',
-    'French',
-    'Chinese'
+  // Top destinations data
+  const topDestinations = [
+    { id: 1, name: 'Santorini', image: '/santorini.jpg', description: 'Description' },
+    { id: 2, name: 'Paris', image: '/paris.jpg', description: 'Description' },
+    { id: 3, name: 'Rome', image: '/rome.jpg', description: 'Description' },
+    { id: 4, name: 'Tokyo', image: '/tokyo.jpg', description: 'Description' },
+    { id: 5, name: 'San Francisco', image: '/sanfrancisco.jpg', description: 'Description' },
+    { id: 6, name: 'Hong Kong', image: '/hongkong.jpg', description: 'Description' }
   ];
   
   // Footer links data
@@ -53,8 +45,8 @@ const Preferences = () => {
           <nav>
             <ul className="flex">
               <li className="mx-4"><Link to="/" className="text-gray-300 hover:text-white transition-colors">Discover</Link></li>
-              <li className="mx-4"><Link to="/explore" className="text-gray-300 hover:text-white transition-colors">Explore</Link></li>
-              <li className="mx-4"><Link to="/itineraries" className="text-gray-300 hover:text-white transition-colors">Your Adventures</Link></li>
+              <li className="mx-4"><Link to="/explore" className="text-gray-300 hover:text-white transition-colors font-medium">Explore</Link></li>
+              <li className="mx-4"><Link to="/itineraries" className="text-gray-300 hover:text-white transition-colors">Plan</Link></li>
               <li className="mx-4"><Link to="/preferences" className="text-gray-300 hover:text-white transition-colors">Profile</Link></li>
             </ul>
           </nav>
@@ -62,49 +54,41 @@ const Preferences = () => {
       </header>
 
       <main className="max-w-6xl mx-auto px-4 py-6">
-        <h2 className="text-2xl font-bold mb-6">User Profile / Preferences</h2>
+        <h2 className="text-2xl font-bold mb-6">Explore</h2>
         
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-          <div className="space-y-8">
-            <div>
-              <h3 className="text-lg font-medium mb-2">Categories</h3>
-              <ul className="space-y-1 text-gray-300">
-                {categories.map((category, index) => (
-                  <li key={index}>{category}</li>
-                ))}
-              </ul>
-            </div>
-            
-            <div>
-              <h3 className="text-lg font-medium mb-2">Accessibility</h3>
-              <ul className="space-y-1 text-gray-300">
-                {accessibility.map((item, index) => (
-                  <li key={index}>{item}</li>
-                ))}
-              </ul>
-            </div>
-            
-            <div>
-              <h3 className="text-lg font-medium mb-2">Language / Region</h3>
-              <ul className="space-y-1 text-gray-300">
-                {languages.map((language, index) => (
-                  <li key={index}>{language}</li>
-                ))}
-              </ul>
-            </div>
-            
-            <div>
-              <h3 className="text-lg font-medium mb-2">Travel Preferences (cooking, packing etc...)</h3>
-              {/* Add more preferences here */}
-            </div>
-          </div>
-          
-          <div className="flex items-center justify-center">
-            <div className="w-16 h-16 rounded-full bg-gray-800 flex items-center justify-center text-2xl">
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+        <div className="mb-6">
+          <div className="relative bg-gray-800 rounded-full px-4 py-2 w-64 mx-auto">
+            <input
+              type="text"
+              placeholder="Search"
+              className="w-full bg-transparent border-none focus:outline-none text-sm text-gray-300"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
+            <button className="absolute right-3 top-2 text-gray-400">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
               </svg>
-            </div>
+            </button>
+          </div>
+        </div>
+
+        <div className="mb-8">
+          <h3 className="text-xl font-semibold mb-4">Top Destinations</h3>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+            {topDestinations.map((destination) => (
+              <div key={destination.id} className="bg-gray-800 rounded-lg overflow-hidden">
+                <div className="w-full h-40 bg-gray-700 flex items-center justify-center">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                  </svg>
+                </div>
+                <div className="p-3">
+                  <h4 className="font-medium">{destination.name}</h4>
+                  <p className="text-sm text-gray-400">{destination.description}</p>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </main>
@@ -151,4 +135,4 @@ const Preferences = () => {
   );
 };
 
-export default Preferences;
+export default Explore;
