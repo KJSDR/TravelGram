@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom';
 import NavigationBar from './NavigationBar';
 import Footer from './Footer';
 import AIRecommendations from './AIRecommendations';
-import PhotoAnalyzer from './PhotoAnalyzer';
 
 const HomePage = () => {
   const trendingDestinations = [
@@ -90,9 +89,7 @@ const HomePage = () => {
       {/* AI Recommendations Section */}
       <AIRecommendations userPreferences={userPreferences} />
       
-      {/* Photo Analyzer Section */}
-      <PhotoAnalyzer />
-
+     
       {/* Content Grid */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
         {/* Trending Destinations */}

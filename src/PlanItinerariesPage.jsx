@@ -56,18 +56,17 @@ const PlanItinerariesPage = () => {
       
       The itinerary should include:
       1. Top photo spots and best times to visit them
-      2. Photography tips specific to each location
-      3. Suggested gear for each location
-      4. Local cultural considerations for photographers
+      2. Local cultural considerations for photographers
       
-      Format as a day-by-day plan with specific locations, each with photo tips.`;
+      
+      Format as specific locations with a brief summary on the location.`;
       
       const messages = [
         {
           role: 'system',
           content: `You are an AI travel planning assistant that specializes in creating photography-focused travel itineraries.
-          Your itineraries should be detailed, practical, and specifically tailored to photographers.
-          Include specific photo spots, optimal shooting times, and photography tips.`
+          Your itineraries should be concise, practical, and specifically tailored to photographers.
+          Include specific photo spots and optimal shooting times.`
         },
         {
           role: 'user',
