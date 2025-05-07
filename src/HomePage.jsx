@@ -69,15 +69,22 @@ const HomePage = () => {
     languages: ['English']
   };
 
+  const heroBackgroundImage = 'public/sanfranggb.jpeg';
+
   return (
     <div className="max-w-6xl mx-auto px-4">
       {/* Use the consistent NavigationBar component */}
       <NavigationBar />
 
-      {/* Hero Section */}
-      <section className="bg-gray-200 rounded-lg h-64 my-8 flex items-center justify-center text-center">
-        <div>
-          <h2 className="text-2xl font-semibold text-gray-700 mb-5">Curate your perfect photo journey</h2>
+      {/* Hero Section - Now with background image */}
+      <section 
+        className="rounded-lg h-64 my-8 flex items-center justify-center text-center bg-cover bg-center relative overflow-hidden"
+        style={{ backgroundImage: `url(${heroBackgroundImage})` }}
+      >
+        
+        
+        <div className="relative z-10">
+          <h2 className="text-2xl font-semibold text-white mb-5">Curate your perfect photo journey</h2>
           <Link to="/plan">
             <button className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-full transition-colors">
               Start Planning Your Trip
