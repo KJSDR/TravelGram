@@ -16,9 +16,6 @@ const NavigationBar = () => {
         <nav className="hidden md:block">
           <ul className="flex">
             <li className="mx-4">
-              <Link to="/" className="text-gray-600 font-medium hover:text-blue-500 transition-colors">Discover</Link>
-            </li>
-            <li className="mx-4">
               <Link to="/explore" className="text-gray-600 font-medium hover:text-blue-500 transition-colors">Explore</Link>
             </li>
             <li className="mx-4">
