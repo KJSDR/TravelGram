@@ -107,7 +107,7 @@ const AIRecommendations = ({ userPreferences }) => {
           className={`px-3 py-2 rounded-md text-sm ${
             isLoading 
               ? 'bg-slate-400 cursor-not-allowed' 
-              : 'bg-blue-600 hover:bg-blue-700 text-white cursor-pointer transition-colors'
+              : 'bg-white text-black hover:bg-gray-400 cursor-pointer transition-colors'
           }`}
         >
           {isLoading ? 'Generating...' : 'Refresh'}

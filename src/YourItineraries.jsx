@@ -89,7 +89,7 @@ const YourItineraries = () => {
             {filteredItineraries.map(([location, itineraryData], locationIndex) => (
               <div key={locationIndex} className="space-y-4">
                 <h3 className="text-xl font-semibold text-gray-800">{location}</h3>
-                <div className="bg-white rounded-lg overflow-hidden shadow-sm border border-gray-200">
+                <div className="bg-white rounded-lg overflow-hidden shadow-sm border border-gray-300">
                   <div className="p-4">
                     <div className="text-sm font-medium mb-3 text-gray-700">
                       {itineraryData.dates ? (

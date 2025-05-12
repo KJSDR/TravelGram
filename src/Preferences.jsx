@@ -22,6 +22,9 @@ const Preferences = () => {
     { name: 'Food/Drink', selected: false },
     { name: 'Architecture', selected: false },
     { name: 'Beaches/Waterfronts', selected: false },
+    { name: 'Music/Live Events', selected: false },
+    { name: 'Amusement Parks/Attractions', selected: false },
+    { name: 'History/Culture', selected: false },
   ]);
   
   const [accessibility, setAccessibility] = useState([
@@ -31,7 +34,10 @@ const Preferences = () => {
   const [languages, setLanguages] = useState([
     { name: '🇬🇧 English', selected: false },
     { name: '🇫🇷 French', selected: false },
-    { name: '🇪🇸 Spanish', selected: false }
+    { name: '🇪🇸 Spanish', selected: false },
+    { name: '🇵🇭 Tagalog', selected: false },
+    { name: '🇨🇳 Chinese', selected: false },
+    { name: '🇯🇵 Japanese', selected: false }
   ]);
   
   // Handle profile image upload
