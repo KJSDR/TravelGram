@@ -6,21 +6,47 @@ import Footer from './Footer';
 const Explore = () => {
   const [searchQuery, setSearchQuery] = useState('');
   
-  // Top destinations data
   const topDestinations = [
-    { id: 1, name: 'Santorini', image: '/santorini.jpg', description: 'Description' },
-    { id: 2, name: 'Paris', image: '/paris.jpg', description: 'Description' },
-    { id: 3, name: 'Rome', image: '/rome.jpg', description: 'Description' },
-    { id: 4, name: 'Tokyo', image: '/tokyo.jpg', description: 'Description' },
-    { id: 5, name: 'San Francisco', image: '/sanfrancisco.jpg', description: 'Description' },
-    { id: 6, name: 'Hong Kong', image: '/hongkong.jpg', description: 'Description' }
+    { 
+      id: 1, 
+      name: 'Copenhagen', 
+      image: `/copenhagen.jpg`,
+      description: 'Beautiful Nordic city with colorful harbor houses' 
+    },
+    { 
+      id: 2, 
+      name: 'Paris', 
+      image: `/paris.avif`,
+      description: 'Romantic city with iconic architecture and cuisine' 
+    },
+    { 
+      id: 3, 
+      name: 'Rome', 
+      image: `/rome.jpg`,
+      description: 'Ancient city with classical ruins and vibrant culture' 
+    },
+    { 
+      id: 4, 
+      name: 'Tokyo', 
+      image: `/tokyo.jpeg`,
+      description: 'Modern metropolis with stunning blend of old and new' 
+    },
+    { 
+      id: 5, 
+      name: 'San Francisco', 
+      image: `/sanfrancisco.webp`,
+      description: 'Scenic bay city known for fog and steep hills' 
+    },
+    { 
+      id: 6, 
+      name: 'London', 
+      image: `/london.jpeg`,
+      description: 'Historic city with iconic landmarks and diverse cultural scenes' 
+    }
   ];
-  
-  // Top destinations data is already defined above
 
   return (
     <div className="bg-white text-gray-800 min-h-screen">
-      {/* Use the consistent NavigationBar component */}
       <NavigationBar />
 
       <main className="max-w-6xl mx-auto px-4 py-6">
@@ -48,10 +74,17 @@ const Explore = () => {
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
             {topDestinations.map((destination) => (
               <div key={destination.id} className="bg-white rounded-lg overflow-hidden shadow-sm border border-gray-200">
-                <div className="w-full h-40 bg-gray-200 flex items-center justify-center">
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                  </svg>
+                <div className="w-full h-40 bg-gray-200 flex items-center justify-center overflow-hidden">
+                  <img 
+                    src={destination.image} 
+                    alt={destination.name}
+                    className="w-full h-full object-cover"
+                    onError={(e) => {
+                      // Fallback to a placeholder if image fails to load
+                      e.target.onerror = null;
+                      e.target.src = `https://via.placeholder.com/400x300?text=${destination.name}`;
+                    }}
+                  />
                 </div>
                 <div className="p-3">
                   <h4 className="font-medium text-gray-800">{destination.name}</h4>
@@ -63,7 +96,6 @@ const Explore = () => {
         </div>
       </main>
 
-      {/* Use the consistent Footer component */}
       <Footer />
     </div>
   );
