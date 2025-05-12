@@ -5,7 +5,7 @@ const NavigationBar = () => {
   const [searchQuery, setSearchQuery] = useState('');
 
   return (
-    <header className="border-b border-gray-200 bg-white">
+    <header className="border-b border-gray-300 bg-white">
       <div className="max-w-6xl mx-auto px-4 py-4 flex justify-between items-center">
         <div className="logo-container">
           <Link to="/">

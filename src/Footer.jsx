@@ -20,7 +20,7 @@ const Footer = () => {
   };
 
   return (
-    <footer className="max-w-6xl mx-auto px-4 py-8 border-t border-gray-200 mt-12">
+    <footer className="max-w-6xl mx-auto px-4 py-8 border-t border-gray-300 mt-12">
       <div className="flex justify-between">
         <div className="flex space-x-4">
           <span className="w-6 h-6 flex items-center justify-center bg-gray-200 rounded-full text-gray-600">

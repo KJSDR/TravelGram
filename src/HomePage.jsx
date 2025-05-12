@@ -180,13 +180,7 @@ const HomePage = () => {
               </div>
             </div>
             
-            <div className="mt-4">
-              <Link to="/itineraries">
-                <button className="w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded transition-colors">
-                  View Creator's Gallery
-                </button>
-              </Link>
-            </div>
+            
           </section>
         </div>
       </main>

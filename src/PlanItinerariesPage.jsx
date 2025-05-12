@@ -91,8 +91,31 @@ const PlanItinerariesPage = () => {
   };
 
   const handleSaveItinerary = () => {
-    // In a real app, you would save to a database
-    // For now, just navigate back to the itineraries page
+    // Get existing itineraries or initialize empty object
+    const existingItineraries = JSON.parse(localStorage.getItem('savedItineraries')) || {};
+    
+    // Format date range if available
+    let dateRange = '';
+    if (startDate && endDate) {
+      const formatDate = (dateStr) => {
+        const date = new Date(dateStr);
+        return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+      };
+      dateRange = `${formatDate(startDate)} - ${formatDate(endDate)}`;
+    }
+    
+    // Add new itinerary
+    existingItineraries[destination] = {
+      content: itinerary,
+      dates: dateRange,
+      photoStyles: style,
+      createdAt: new Date().toISOString()
+    };
+    
+    // Save to localStorage
+    localStorage.setItem('savedItineraries', JSON.stringify(existingItineraries));
+    
+    // Navigate to itineraries page
     navigate('/itineraries');
   };
 
@@ -215,7 +238,14 @@ const PlanItinerariesPage = () => {
                   </button>
                   
                   <button
-                    onClick={() => setGenerateStatus('idle')}
+                    onClick={() => {
+                      setGenerateStatus('idle');
+                      setItinerary(null);
+                      setDestination('');
+                      setStartDate('');
+                      setEndDate('');
+                      setStyle('');
+                    }}
                     className="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300 transition-colors"
                   >
                     Start Over
