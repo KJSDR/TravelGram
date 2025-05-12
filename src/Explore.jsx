@@ -73,7 +73,7 @@ const Explore = () => {
           <h3 className="text-xl font-semibold mb-4 text-gray-800">Top Destinations</h3>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
             {topDestinations.map((destination) => (
-              <div key={destination.id} className="bg-white rounded-lg overflow-hidden shadow-sm border border-gray-200">
+              <div key={destination.id} className="bg-white rounded-lg overflow-hidden shadow-sm border border-gray-300">
                 <div className="w-full h-40 bg-gray-200 flex items-center justify-center overflow-hidden">
                   <img 
                     src={destination.image} 

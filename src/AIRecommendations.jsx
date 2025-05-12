@@ -98,8 +98,8 @@ const AIRecommendations = ({ userPreferences }) => {
     <div className="bg-white rounded-xl shadow-sm overflow-hidden my-5">
       <div className="bg-slate-50 p-4 border-b border-slate-200 flex justify-between items-center">
         <h3 className="m-0 text-lg text-slate-800 font-semibold flex items-center">
-          <span className="mr-2">✨</span>
-          AI-Powered Photo Spot Recommendations
+          <span className="mr-2"></span>
+          TravelGram Recommendations
         </h3>
         <button 
           onClick={generateRecommendations}
