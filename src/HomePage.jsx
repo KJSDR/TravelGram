@@ -1,10 +1,72 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import NavigationBar from './NavigationBar';
 import Footer from './Footer';
 import AIRecommendations from './AIRecommendations';
 
 const HomePage = () => {
+  const [travelgramPhotos, setTravelgramPhotos] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  // Simulating Instagram-like content for the #TravelGram feed
+  useEffect(() => {
+    // This simulates an API call to fetch Instagram photos
+    // In a real implementation, this would be replaced with your Instagram API call
+    setTimeout(() => {
+      const mockTravelgramPhotos = [
+        {
+          id: 'tg1',
+          imageUrl: 'https://images.unsplash.com/photo-1469854523086-cc02fe5d8800',
+          username: 'travelista',
+          caption: 'Lost in the beauty of Santorini',
+          likes: 1243
+        },
+        {
+          id: 'tg2',
+          imageUrl: 'https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1',
+          username: 'nomadlife',
+          caption: 'Morning light in the mountains',
+          likes: 892
+        },
+        {
+          id: 'tg3',
+          imageUrl: 'https://images.unsplash.com/photo-1488085061387-422e29b40080',
+          username: 'wanderlust_ph',
+          caption: 'City streets have their own magic',
+          likes: 765
+        },
+        {
+          id: 'tg4',
+          // Fixed this URL to ensure it's different and valid
+          imageUrl: 'https://images.unsplash.com/photo-1533105079780-92b9be482077',
+          username: 'photojourney',
+          caption: 'Golden hour at the temple',
+          likes: 1518
+        },
+        {
+          id: 'tg5',
+          imageUrl: 'https://images.unsplash.com/photo-1534470786806-fd93122d01fd',
+          username: 'viewfinder',
+          caption: 'Paradise found in Bali',
+          likes: 2104
+        },
+        {
+          id: 'tg6',
+          // Changed this URL to be unique
+          imageUrl: 'https://images.unsplash.com/photo-1502791451862-7bd8c1df43a7',
+          username: 'globetrotter',
+          caption: 'Sunset over the canyon',
+          likes: 1876
+        }
+      ];
+      
+      // Only use the first 4 photos for the grid
+      setTravelgramPhotos(mockTravelgramPhotos.slice(0, 4));
+      setLoading(false);
+    }, 500);
+  }, []);
+
+  // eslint-disable-next-line no-unused-vars
   const trendingDestinations = [
     {
       id: 1,
@@ -53,14 +115,7 @@ const HomePage = () => {
     }
   ];
 
-  const featuredCreator = {
-    name: 'Elena Rodriguez',
-    location: 'Barcelona, Spain',
-    rating: 4.9,
-    reviews: 52,
-    specialties: 'Street, Architecture, Portraits',
-    avatar: '/elena.jpg'
-  };
+  
   
   // User preferences for AI recommendations
   const userPreferences = {
@@ -95,39 +150,8 @@ const HomePage = () => {
         {/* AI Recommendations Section */}
         <AIRecommendations userPreferences={userPreferences} />
         
-        {/* Content Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
-          {/* Trending Destinations */}
-          <section className="bg-white rounded-lg p-5 shadow-sm">
-            <h3 className="text-lg font-semibold mb-4">Trending Photo Destinations</h3>
-            
-            <div className="space-y-4">
-              {trendingDestinations.map((destination) => (
-                <div key={destination.id} className="flex bg-gray-50 rounded-lg overflow-hidden">
-                  <div className="w-24 h-24 bg-gray-200 flex-shrink-0">
-                    <img 
-                      src={destination.image} 
-                      alt={destination.name} 
-                      className="w-full h-full object-cover"
-                      onError={(e) => e.target.src = 'https://via.placeholder.com/100'}
-                    />
-                  </div>
-                  
-                  <div className="p-3">
-                    <h4 className="font-semibold text-gray-800">{destination.name}</h4>
-                    <p className="text-sm text-gray-600">{destination.description}</p>
-                    <div className="flex items-center mt-1 text-sm">
-                      <span className="flex items-center">⭐ {destination.rating}</span>
-                      <span className="ml-3 bg-gray-200 px-2 py-0.5 rounded-full text-xs">
-                        {destination.tag}
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </section>
-
+        {/* Content Grid - Two Column Layout */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
           {/* Top Photo Spots */}
           <section className="bg-white rounded-lg p-5 shadow-sm">
             <h3 className="text-lg font-semibold mb-4">Top Photo Spots This Month</h3>
@@ -136,7 +160,7 @@ const HomePage = () => {
               {topPhotoSpots.map((spot, index) => (
                 <div 
                   key={spot.id} 
-                  className={`relative rounded-lg overflow-hidden ${index === 0 ? "col-span-2 h-40" : "h-28"}`}
+                  className={`relative rounded-lg overflow-hidden ${index === 0 ? "col-span-2 h-48" : "h-36"}`}
                 >
                   <div className="w-full h-full bg-gray-200">
                     <img 
@@ -158,29 +182,43 @@ const HomePage = () => {
             </div>
           </section>
 
-          {/* Featured Creator */}
+          {/* #TravelGram Feed */}
           <section className="bg-white rounded-lg p-5 shadow-sm">
-            <h3 className="text-lg font-semibold mb-4">#TravelGram</h3>
-            
-            <div className="flex items-center bg-gray-50 p-3 rounded-lg mb-4">
-              <div className="w-14 h-14 bg-gray-200 rounded-full mr-4 overflow-hidden flex-shrink-0">
-                <img 
-                  src={featuredCreator.avatar} 
-                  alt={featuredCreator.name} 
-                  className="w-full h-full object-cover"
-                  onError={(e) => e.target.src = 'https://via.placeholder.com/56'}
-                />
-              </div>
-              
-              <div>
-                <h5 className="font-semibold">{featuredCreator.name}</h5>
-                <p className="text-sm text-gray-600">{featuredCreator.location}</p>
-                <p className="text-sm text-gray-600">⭐ {featuredCreator.rating} ({featuredCreator.reviews} reviews)</p>
-                <p className="text-sm text-gray-600">Specialties: {featuredCreator.specialties}</p>
-              </div>
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-lg font-semibold">#TravelGram</h3>
+              <a href="#" className="text-blue-600 text-sm hover:underline">View all</a>
             </div>
             
-            
+            {loading ? (
+              <div className="flex justify-center items-center h-64">
+                <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-blue-500"></div>
+              </div>
+            ) : (
+              <div className="grid grid-cols-2 gap-3">
+                {travelgramPhotos.map((photo) => (
+                  <div key={photo.id} className="overflow-hidden">
+                    <div className="relative group">
+                      <img 
+                        src={photo.imageUrl} 
+                        alt={`Photo by ${photo.username}`}
+                        className="w-full h-36 object-cover rounded-lg transition-transform duration-300 group-hover:scale-105"
+                        // Add error handling for images that fail to load
+                        onError={(e) => {
+                          console.error(`Failed to load image for ${photo.id}`);
+                          e.target.src = 'https://via.placeholder.com/300x200?text=Image+Not+Found';
+                        }}
+                      />
+                      <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                        <p className="text-white text-xs flex items-center">
+                          <span className="mr-1">❤️</span> {photo.likes}
+                        </p>
+                      </div>
+                    </div>
+                    <p className="text-xs text-gray-600 mt-1 truncate">@{photo.username}</p>
+                  </div>
+                ))}
+              </div>
+            )}
           </section>
         </div>
       </main>

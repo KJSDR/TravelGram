@@ -4,8 +4,9 @@ import NavigationBar from './NavigationBar';
 import Footer from './Footer';
 import MistralService from './mistralService';
 
-// Access the environment variable using Vite's import.meta.env
+// Access the environment variables using Vite's import.meta.env
 const MISTRAL_API_KEY = import.meta.env.VITE_MISTRAL_API_KEY;
+const PIXABAY_API_KEY = import.meta.env.VITE_PIXABAY_API_KEY;
 
 const PlanItinerariesPage = () => {
   const navigate = useNavigate();
@@ -15,6 +16,7 @@ const PlanItinerariesPage = () => {
   const [generateStatus, setGenerateStatus] = useState('idle'); // idle, loading, success, error
   const [itinerary, setItinerary] = useState(null);
   const [error, setError] = useState(null);
+  const [locationImages, setLocationImages] = useState({});
   
   const availableStyles = [
     'Street Photography',
@@ -26,6 +28,50 @@ const PlanItinerariesPage = () => {
     'Night/Low Light',
     'Minimalist'
   ];
+
+  const fetchImageForLocation = async (locationName, destinationName) => {
+    try {
+      // Create a good search query combining the location name, destination, and possibly style
+      const query = `${locationName} ${destinationName} ${style.includes('Landscape') ? 'landscape' : 'travel'}`;
+      
+      // Send request to Pixabay API
+      const response = await fetch(
+        `https://pixabay.com/api/?key=${PIXABAY_API_KEY}&q=${encodeURIComponent(query)}&image_type=photo&orientation=horizontal&per_page=3`
+      );
+      
+      if (!response.ok) {
+        throw new Error('Failed to fetch from Pixabay API');
+      }
+      
+      const data = await response.json();
+      
+      // If images found, return the URL of the first one
+      if (data.hits && data.hits.length > 0) {
+        return data.hits[0].webformatURL;
+      } else {
+        // Try a more generic search if specific search returned no results
+        const fallbackResponse = await fetch(
+          `https://pixabay.com/api/?key=${PIXABAY_API_KEY}&q=${encodeURIComponent(destinationName + ' travel')}&image_type=photo&orientation=horizontal&per_page=3`
+        );
+        
+        if (!fallbackResponse.ok) {
+          throw new Error('Failed to fetch fallback from Pixabay API');
+        }
+        
+        const fallbackData = await fallbackResponse.json();
+        
+        if (fallbackData.hits && fallbackData.hits.length > 0) {
+          return fallbackData.hits[0].webformatURL;
+        }
+      }
+      
+      // Return null if no images found
+      return null;
+    } catch (error) {
+      console.error('Error fetching image:', error);
+      return null;
+    }
+  };
 
   const handleStyleSelect = (selectedStyle) => {
     if (style.includes(selectedStyle)) {
@@ -45,6 +91,7 @@ const PlanItinerariesPage = () => {
 
     setGenerateStatus('loading');
     setError(null);
+    setLocationImages({}); // Clear previous images
     
     try {
       const mistralService = new MistralService(MISTRAL_API_KEY);
@@ -60,6 +107,7 @@ const PlanItinerariesPage = () => {
           2. Best time of day for photography (be specific about lighting conditions)
           3. A concise description (max 2 sentences)
           4. A specific photography technique or equipment tip for that location
+          5. A short image description that could be used to generate an image of this location (1-2 sentences describing the visual scene)
           
           Format your response as a JSON array with objects containing these fields:
           {
@@ -68,7 +116,8 @@ const PlanItinerariesPage = () => {
                 "name": "Location Name",
                 "bestTime": "Time of day for optimal photos",
                 "description": "Max 2 sentences about the spot",
-                "photoTip": "A specific photography technique or equipment recommendation"
+                "photoTip": "A specific photography technique or equipment recommendation",
+                "imageDescription": "A visual description of the location for image generation"
               }
             ]
           }
@@ -106,6 +155,25 @@ const PlanItinerariesPage = () => {
           
           // Parse the JSON content
           const parsedData = JSON.parse(jsonContent);
+          
+          // Fetch images for each location
+          const imagePromises = parsedData.locations.map(location => 
+            fetchImageForLocation(location.name, destination)
+          );
+          
+          // Wait for all image fetches to complete
+          const imageResults = await Promise.all(imagePromises);
+          
+          // Create a map of location index to image URL
+          const newLocationImages = {};
+          imageResults.forEach((imageUrl, index) => {
+            if (imageUrl) {
+              newLocationImages[index] = imageUrl;
+            }
+          });
+          
+          setLocationImages(newLocationImages);
+          
           // Store both original and parsed data
           setItinerary({
             raw: content,
@@ -139,6 +207,7 @@ const PlanItinerariesPage = () => {
       parsedContent: itinerary.parsed,
       photoStyles: style,
       locationCount: locationCount,
+      locationImages: locationImages, // Save the image URLs too
       createdAt: new Date().toISOString()
     };
     
@@ -243,34 +312,46 @@ const PlanItinerariesPage = () => {
             {generateStatus === 'success' && itinerary && (
               <div className="space-y-6">
                 {itinerary.parsed ? (
-                  <div>
-                    <div className="grid grid-cols-1 gap-4">
-                      {itinerary.parsed.locations.map((location, locIndex) => (
-                        <div key={locIndex} className="bg-gray-50 p-4 rounded-lg shadow-sm">
-                          <h3 className="text-lg font-semibold text-gray-900 border-b border-gray-200 pb-2 mb-3">{location.name}</h3>
-                          <p className="text-sm text-blue-700 mb-2">
-                            <span className="inline-block mr-2">
-                              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 inline-block" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                              </svg>
-                            </span>
-                            Best time: {location.bestTime}
-                          </p>
-                          <p className="text-gray-700 mb-3">{location.description}</p>
-                          <div className="bg-blue-50 p-3 rounded border-l-4 border-blue-500">
-                            <p className="text-sm font-medium text-gray-800">
+                  <div className="grid grid-cols-1 gap-4">
+                    {itinerary.parsed.locations.map((location, locIndex) => (
+                      <div key={locIndex} className="bg-gray-50 p-4 rounded-lg shadow-sm">
+                        <div className="flex flex-col md:flex-row gap-4 items-start">
+                          <div className="w-full md:w-1/3 mb-3 md:mb-0 flex-shrink-0">
+                            {/* Location image from Pixabay API */}
+                            <div className="rounded-lg overflow-hidden shadow-md" style={{ height: '200px' }}>
+                              <img 
+                                src={locationImages[locIndex] || `https://via.placeholder.com/800x600/1E3A8A/FFFFFF?text=Photography+Location`} 
+                                alt={`Travel photography - ${location.name}`}
+                                className="object-cover w-full h-full"
+                              />
+                            </div>
+                          </div>
+                          <div className="w-full md:w-2/3">
+                            <h3 className="text-lg font-semibold text-gray-900 border-b border-gray-200 pb-2 mb-3">{location.name}</h3>
+                            <p className="text-sm text-blue-700 mb-2">
                               <span className="inline-block mr-2">
                                 <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 inline-block" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
-                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                                 </svg>
                               </span>
-                              Photo Tip: {location.photoTip}
+                              Best time: {location.bestTime}
                             </p>
+                            <p className="text-gray-700 mb-3">{location.description}</p>
+                            <div className="bg-blue-50 p-3 rounded border-l-4 border-blue-500">
+                              <p className="text-sm font-medium text-gray-800">
+                                <span className="inline-block mr-2">
+                                  <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 inline-block" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
+                                  </svg>
+                                </span>
+                                Photo Tip: {location.photoTip}
+                              </p>
+                            </div>
                           </div>
                         </div>
-                      ))}
-                    </div>
+                      </div>
+                    ))}
                   </div>
                 ) : (
                   <div className="prose max-w-none">
@@ -302,10 +383,12 @@ const PlanItinerariesPage = () => {
                       setDestination('');
                       setLocationCount(5);
                       setStyle('');
+                      setLocationImages({});
                     }}
                     className="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300 transition-colors"
                   >
-                    </button>
+                    Start Over
+                  </button>
                 </div>
               </div>
             )}
@@ -316,8 +399,8 @@ const PlanItinerariesPage = () => {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
                 </svg>
-                <p className="text-lg">Fill in the details on the left to create your custom photo itinerary</p>
-                <p className="mt-2 text-sm">Our AI will generate a personalized plan optimized for photography</p>
+                <p className="text-lg">Fill in the details on the left to discover photo-worthy locations</p>
+                <p className="mt-2 text-sm">Our AI will generate a personalized list of photography spots with tips</p>
               </div>
             )}
           </div>
