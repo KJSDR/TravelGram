@@ -31,14 +31,18 @@ const Preferences = () => {
     { name: 'Wheelchair Accessible', selected: false },
   ]);
   
-  const [languages, setLanguages] = useState([
-    { name: '🇬🇧 English', selected: false },
-    { name: '🇫🇷 French', selected: false },
-    { name: '🇪🇸 Spanish', selected: false },
-    { name: '🇵🇭 Tagalog', selected: false },
-    { name: '🇨🇳 Chinese', selected: false },
-    { name: '🇯🇵 Japanese', selected: false }
-  ]);
+  // Languages data - doesn't need to be updated after initialization
+  const languages = [
+    { name: '🇬🇧 English', id: 'english' },
+    { name: '🇫🇷 French', id: 'french' },
+    { name: '🇪🇸 Spanish', id: 'spanish' },
+    { name: '🇵🇭 Tagalog', id: 'tagalog' },
+    { name: '🇨🇳 Chinese', id: 'chinese' },
+    { name: '🇯🇵 Japanese', id: 'japanese' }
+  ];
+  
+  // Add a state to track the selected language
+  const [selectedLanguage, setSelectedLanguage] = useState('');
   
   // Handle profile image upload
   const handleImageChange = (e) => {
@@ -87,11 +91,9 @@ const Preferences = () => {
     setAccessibility(updatedAccessibility);
   };
   
-  // Handle toggle for languages
-  const toggleLanguage = (index) => {
-    const updatedLanguages = [...languages];
-    updatedLanguages[index].selected = !updatedLanguages[index].selected;
-    setLanguages(updatedLanguages);
+  // Updated handler for language selection (radio buttons)
+  const handleLanguageChange = (languageId) => {
+    setSelectedLanguage(languageId);
   };
 
   return (
@@ -145,14 +147,16 @@ const Preferences = () => {
             <div className="bg-white p-6 rounded-lg shadow-md">
               <h3 className="text-lg font-medium mb-3 text-gray-800">Language / Region</h3>
               <ul className="space-y-2">
-                {languages.map((language, index) => (
-                  <li key={index} className="flex items-center">
+                {languages.map((language) => (
+                  <li key={language.id} className="flex items-center">
                     <label className="flex items-center cursor-pointer">
                       <input
-                        type="checkbox"
-                        checked={language.selected}
-                        onChange={() => toggleLanguage(index)}
-                        className="w-4 h-4 text-blue-600 rounded focus:ring-2 focus:ring-blue-500"
+                        type="radio"
+                        name="language"
+                        value={language.id}
+                        checked={selectedLanguage === language.id}
+                        onChange={() => handleLanguageChange(language.id)}
+                        className="w-4 h-4 text-blue-600 focus:ring-2 focus:ring-blue-500"
                       />
                       <span className="ml-2 text-gray-700">{language.name}</span>
                     </label>

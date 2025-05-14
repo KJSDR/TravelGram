@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from './AuthContext';
-import './Login.css';
+import './Login.css'; // We'll reuse the login styles
 
-const Login = () => {
+const Signup = () => {
   const [formData, setFormData] = useState({
+    name: '',
     email: '',
     password: '',
+    confirmPassword: '',
   });
   const [errors, setErrors] = useState({});
   const navigate = useNavigate();
@@ -22,16 +24,31 @@ const Login = () => {
 
   const validateForm = () => {
     const newErrors = {};
+    
+    // Validate name
+    if (!formData.name.trim()) {
+      newErrors.name = 'Name is required';
+    }
+    
+    // Validate email
     if (!formData.email) {
       newErrors.email = 'Email is required';
     } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
       newErrors.email = 'Email is invalid';
     }
+    
+    // Validate password
     if (!formData.password) {
       newErrors.password = 'Password is required';
     } else if (formData.password.length < 6) {
       newErrors.password = 'Password must be at least 6 characters';
     }
+    
+    // Validate password confirmation
+    if (formData.password !== formData.confirmPassword) {
+      newErrors.confirmPassword = 'Passwords do not match';
+    }
+    
     return newErrors;
   };
 
@@ -40,30 +57,44 @@ const Login = () => {
     const newErrors = validateForm();
     
     if (Object.keys(newErrors).length === 0) {
-      // In a real app, you would verify credentials with a backend
-      // For this demo, we'll just simulate a successful login
+      // In a real app, you would register the user with a backend
+      // For this demo, we'll simulate a successful registration
       const userData = {
+        name: formData.name,
         email: formData.email,
-        name: formData.email.split('@')[0], // Just using part of email as name for demo
       };
       
-      // Use the login function from auth context
+      // Use the login function from auth context to log in after signup
       login(userData);
       
-      console.log('Login successful', userData);
-      navigate('/'); // Redirect to home page after successful login
+      console.log('Signup successful', userData);
+      navigate('/'); // Redirect to home page after successful signup
     } else {
       setErrors(newErrors);
     }
   };
 
   return (
-    <div className="login-container">
+    <div className="login-container"> {/* Reusing login-container styles */}
       <div className="login-box">
-        <h2>Welcome Back</h2>
-        <p className="subtitle">Sign in to continue your journey</p>
+        <h2>Join TravelGram</h2>
+        <p className="subtitle">Create your account to start your journey</p>
         
         <form onSubmit={handleSubmit} className="login-form">
+          <div className="form-group">
+            <label htmlFor="name">Name</label>
+            <input
+              type="text"
+              id="name"
+              name="name"
+              value={formData.name}
+              onChange={handleChange}
+              placeholder="Enter your name"
+              className={errors.name ? 'error' : ''}
+            />
+            {errors.name && <span className="error-message">{errors.name}</span>}
+          </div>
+          
           <div className="form-group">
             <label htmlFor="email">Email</label>
             <input
@@ -86,27 +117,38 @@ const Login = () => {
               name="password"
               value={formData.password}
               onChange={handleChange}
-              placeholder="Enter your password"
+              placeholder="Create a password"
               className={errors.password ? 'error' : ''}
             />
             {errors.password && <span className="error-message">{errors.password}</span>}
           </div>
+          
+          <div className="form-group">
+            <label htmlFor="confirmPassword">Confirm Password</label>
+            <input
+              type="password"
+              id="confirmPassword"
+              name="confirmPassword"
+              value={formData.confirmPassword}
+              onChange={handleChange}
+              placeholder="Confirm your password"
+              className={errors.confirmPassword ? 'error' : ''}
+            />
+            {errors.confirmPassword && <span className="error-message">{errors.confirmPassword}</span>}
+          </div>
 
           <button type="submit" className="login-button">
-            Sign In
+            Create Account
           </button>
         </form>
 
         <div className="login-footer">
           <p>
-            Don't have an account?{' '}
-            <Link to="/signup" className="signup-link">
-              Sign up
+            Already have an account?{' '}
+            <Link to="/login" className="signup-link">
+              Sign in
             </Link>
           </p>
-          <Link to="/forgot-password" className="forgot-password">
-            Forgot Password?
-          </Link>
         </div>
         
         <div className="back-to-home">
@@ -119,4 +161,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default Signup;
