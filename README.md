@@ -1,12 +1,10 @@
-# React + Vite
+# TravelGram
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+TravelGram is a specialized travel planning app for photographers that generates customized itineraries focused on capturing the best shots at any destination. Using AI technology, it recommends optimal photo locations, shooting times, and cultural considerations while allowing users to filter by photography style preferences such as landscape, street, architecture, or night photography.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend using TypeScript and enable type-aware lint rules. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+- AI-Generated Photography Itineraries: Create custom travel plans focused on photography
+- Photography Style Customization: Tailor plans based on your preferred style
+- Save and Manage Itineraries: Store your plans for future reference
+- Explore Trending Destinations: Discover popular photography spots
