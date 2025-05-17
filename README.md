@@ -8,3 +8,11 @@ TravelGram is a specialized travel planning app for photographers that generates
 - Photography Style Customization: Tailor plans based on your preferred style
 - Save and Manage Itineraries: Store your plans for future reference
 - Explore Trending Destinations: Discover popular photography spots
+
+## Technologies
+
+- React + Vite
+- React Router
+- Tailwind CSS
+- Mistral AI for itinerary generation
+- LocalStorage for data persistence
