@@ -8,13 +8,17 @@ const Preferences = () => {
   const [profileData, setProfileData] = useState({
     name: "Jane Doe",
     email: "janedoe1999@gmail.com",
-    profileImage: null
+    profileImage: null,
+    countriesVisited: 12,
+    citiesVisited: 28
   });
   
   // Modal state
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [tempName, setTempName] = useState(profileData.name);
   const [previewUrl, setPreviewUrl] = useState(null);
+  const [tempCountriesVisited, setTempCountriesVisited] = useState(profileData.countriesVisited);
+  const [tempCitiesVisited, setTempCitiesVisited] = useState(profileData.citiesVisited);
 
   // Sample preferences data with selected state
   const [categories, setCategories] = useState([
@@ -59,6 +63,8 @@ const Preferences = () => {
   const openModal = () => {
     setTempName(profileData.name);
     setPreviewUrl(profileData.profileImage);
+    setTempCountriesVisited(profileData.countriesVisited);
+    setTempCitiesVisited(profileData.citiesVisited);
     setIsModalOpen(true);
   };
   
@@ -72,7 +78,9 @@ const Preferences = () => {
     setProfileData({
       ...profileData,
       name: tempName,
-      profileImage: previewUrl
+      profileImage: previewUrl,
+      countriesVisited: tempCountriesVisited,
+      citiesVisited: tempCitiesVisited
     });
     closeModal();
   };
@@ -187,7 +195,20 @@ const Preferences = () => {
               )}
             </div>
             <h3 className="text-lg font-semibold text-gray-800 mb-2">{profileData.name}</h3>
-            <p className="text-gray-600 mb-6">{profileData.email}</p>
+            <p className="text-gray-600 mb-2">{profileData.email}</p>
+            
+            {/* Travel Stats */}
+            <div className="flex items-center justify-center space-x-6 mb-6">
+              <div className="flex flex-col items-center">
+                <span className="text-2xl font-bold text-blue-600">{profileData.countriesVisited}</span>
+                <span className="text-sm text-gray-600">Countries Visited</span>
+              </div>
+              <div className="flex flex-col items-center">
+                <span className="text-2xl font-bold text-blue-600">{profileData.citiesVisited}</span>
+                <span className="text-sm text-gray-600">Cities Visited</span>
+              </div>
+            </div>
+            
             <button 
               onClick={openModal}
               className="px-4 py-2 bg-gray-200 text-gray-700 rounded hover:bg-gray-300 transition-colors"
@@ -258,7 +279,7 @@ const Preferences = () => {
               />
             </div>
             
-            <div className="mb-2">
+            <div className="mb-4">
               <label className="block text-gray-700 text-sm font-medium mb-2">
                 Email
               </label>
@@ -270,6 +291,35 @@ const Preferences = () => {
                 placeholder="Your email"
               />
               <p className="text-xs text-gray-500 mt-1">Email cannot be changed.</p>
+            </div>
+            
+            {/* Travel Stats Inputs */}
+            <div className="grid grid-cols-2 gap-4 mb-4">
+              <div>
+                <label className="block text-gray-700 text-sm font-medium mb-2">
+                  Countries Visited
+                </label>
+                <input
+                  type="number"
+                  min="0"
+                  value={tempCountriesVisited}
+                  onChange={(e) => setTempCountriesVisited(parseInt(e.target.value) || 0)}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+              </div>
+              
+              <div>
+                <label className="block text-gray-700 text-sm font-medium mb-2">
+                  Cities Visited
+                </label>
+                <input
+                  type="number"
+                  min="0"
+                  value={tempCitiesVisited}
+                  onChange={(e) => setTempCitiesVisited(parseInt(e.target.value) || 0)}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+              </div>
             </div>
             
             <div className="flex justify-end gap-2 mt-6">
