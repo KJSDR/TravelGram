@@ -47,6 +47,25 @@ const YourItineraries = () => {
     return 'Photo spots';
   };
 
+  // Function to toggle completed status
+  const toggleCompleted = (location) => {
+    const updatedItineraries = {...savedItineraries};
+    const itinerary = updatedItineraries[location];
+    
+    // Toggle completed status
+    itinerary.completed = !itinerary.completed;
+    
+    // If marking as completed, add completion date
+    if (itinerary.completed) {
+      itinerary.completedDate = new Date().toISOString();
+    } else {
+      delete itinerary.completedDate;
+    }
+    
+    setSavedItineraries(updatedItineraries);
+    localStorage.setItem('savedItineraries', JSON.stringify(updatedItineraries));
+  };
+
   // If no saved itineraries, show a message and link to create one
   if (Object.keys(savedItineraries).length === 0) {
     return (
@@ -114,71 +133,100 @@ const YourItineraries = () => {
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {filteredItineraries.map(([location, itineraryData], locationIndex) => (
-              <div key={locationIndex} className="bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-300">
+              <div 
+                key={locationIndex} 
+                className={`bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-300 ${itineraryData.completed ? 'ring-2 ring-green-500' : ''}`}
+              >
                 {/* Image Header */}
                 <div className="h-48 overflow-hidden relative">
                   <img 
                     src={getItineraryImage(itineraryData)} 
                     alt={`Photo locations in ${location}`} 
-                    className="w-full h-full object-cover"
+                    className={`w-full h-full object-cover ${itineraryData.completed ? 'opacity-90' : ''}`}
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
+                  
+                  {/* Completed Badge */}
+                  {itineraryData.completed && (
+                    <div className="absolute top-3 right-3 bg-green-500 text-white px-2 py-1 rounded-full text-xs font-medium">
+                      Completed
+                    </div>
+                  )}
+                  
                   <div className="absolute bottom-0 left-0 p-4 text-white">
                     <h3 className="text-xl font-bold">{location}</h3>
                     <p className="text-sm opacity-90">{getItinerarySummary(itineraryData)}</p>
+                    
+                    {/* Show completion date if completed */}
+                    {itineraryData.completed && itineraryData.completedDate && (
+                      <p className="text-xs mt-1 opacity-80">
+                        Completed: {new Date(itineraryData.completedDate).toLocaleDateString()}
+                      </p>
+                    )}
                   </div>
                 </div>
                 
                 {/* Card Footer */}
-                <div className="p-4 flex justify-between items-center">
-                  <div>
-                    {itineraryData.photoStyles && (
-                      <div className="flex flex-wrap gap-1">
-                        {itineraryData.photoStyles.split(',').slice(0, 2).map((style, idx) => (
-                          <span key={idx} className="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">
-                            {style.trim()}
-                          </span>
-                        ))}
-                        {itineraryData.photoStyles.split(',').length > 2 && (
-                          <span className="px-2 py-1 bg-gray-100 text-gray-800 text-xs rounded-full">
-                            +{itineraryData.photoStyles.split(',').length - 2} more
-                          </span>
-                        )}
-                      </div>
-                    )}
-                  </div>
-                  
-                  <div className="flex space-x-2">
-                    <button 
-                      className="text-blue-600 hover:text-blue-800"
-                      onClick={() => {
-                        // Logic to view full itinerary would go here
-                        // For now, we'll just alert
-                        alert(`Full collection for ${location}`);
-                      }}
-                      aria-label="View collection"
+                <div className="p-4">
+                  {/* Action Buttons */}
+                  <div className="flex justify-between items-center">
+                    <button
+                      onClick={() => toggleCompleted(location)}
+                      className={`flex items-center space-x-1 px-3 py-1 rounded-full text-sm font-medium transition-colors ${
+                        itineraryData.completed 
+                          ? 'bg-green-100 text-green-700 hover:bg-green-200' 
+                          : 'bg-blue-100 text-blue-700 hover:bg-blue-200'
+                      }`}
                     >
-                      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                      </svg>
+                      {itineraryData.completed ? (
+                        <>
+                          <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+                            <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                          </svg>
+                          <span>Completed</span>
+                        </>
+                      ) : (
+                        <>
+                          <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                          </svg>
+                          <span>Mark Complete</span>
+                        </>
+                      )}
                     </button>
                     
-                    <button 
-                      className="text-red-600 hover:text-red-800"
-                      onClick={() => {
-                        // Remove this itinerary
-                        const updatedItineraries = {...savedItineraries};
-                        delete updatedItineraries[location];
-                        setSavedItineraries(updatedItineraries);
-                        localStorage.setItem('savedItineraries', JSON.stringify(updatedItineraries));
-                      }}
-                      aria-label="Delete collection"
-                    >
-                      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                      </svg>
-                    </button>
+                    <div className="flex space-x-2">
+                      <button 
+                        className="text-blue-600 hover:text-blue-800"
+                        onClick={() => {
+                          // Logic to view full itinerary would go here
+                          // For now, we'll just alert
+                          alert(`Full collection for ${location}`);
+                        }}
+                        aria-label="View collection"
+                      >
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                        </svg>
+                      </button>
+                      
+                      <button 
+                        className="text-red-600 hover:text-red-800"
+                        onClick={() => {
+                          // Remove this itinerary
+                          const updatedItineraries = {...savedItineraries};
+                          delete updatedItineraries[location];
+                          setSavedItineraries(updatedItineraries);
+                          localStorage.setItem('savedItineraries', JSON.stringify(updatedItineraries));
+                        }}
+                        aria-label="Delete collection"
+                      >
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                        </svg>
+                      </button>
+                    </div>
                   </div>
                 </div>
               </div>
