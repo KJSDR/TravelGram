@@ -124,7 +124,7 @@ const HomePage = () => {
     languages: ['English']
   };
 
-  const heroBackgroundImage = 'public/sanfranggb.jpeg';
+  const heroBackgroundImage = '/sanfranggb.jpeg';
 
   return (
     <div className="bg-white text-gray-800 min-h-screen">
